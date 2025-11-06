@@ -4,6 +4,7 @@ import {
   categorySchema,
   type CategoryFormData,
 } from "../schemas/category-schema";
+import { API_PRODUCTS } from "../api/products";
 
 export function AddCategory() {
   const {
@@ -14,7 +15,18 @@ export function AddCategory() {
     resolver: zodResolver(categorySchema),
   });
 
-  function onSubmit(data: CategoryFormData) {}
+  async function onSubmit(data: CategoryFormData) {
+      await fetch(`${API_PRODUCTS}/categorias`, {
+        body: JSON.stringify({
+          nome: data.name
+        }),
+        method: "POST",
+        headers: {
+          'Content-type': "application/json"
+        }
+      }) 
+      alert("Categoria cadastrada com sucesso")
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-8">
@@ -41,7 +53,7 @@ export function AddCategory() {
         {errors.name && <p className="text-red-600">{errors.name.message}</p>}
 
         <button
-          className="border border-green-400 hover:cursor-pointer"
+          className="bg-green-800 hover:cursor-pointer text-white font-bold"
           type="submit"
         >
           Criar
